@@ -1,0 +1,23 @@
+name: RPM Build
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: build RPM package
+      id: rpm
+      uses: zhullyb/rpmbuild-github-action@master
+      with:
+        spec_file: "dingtalk-bin.spec"
+
+    - name: Upload Artifact
+      uses: nanoufo/action-upload-artifacts-and-release-assets@v1.4
+      with:
+        path: ${{ steps.rpm.outputs.rpm_dir_path }}/**/*.rpm
